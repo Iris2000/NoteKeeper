@@ -2,15 +2,25 @@ package com.example.notekeeper;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
+    NoteDatabase db;
+    List<NoteClass> noteList;
+    NoteAdapter adapter;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.black));
         setSupportActionBar(toolbar);
+        db = new NoteDatabase(this);
+        noteList = db.getNoteList();
+//        Log.d("testing", "testing");
+        recyclerView = findViewById(R.id.noteList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new NoteAdapter(this, noteList);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -32,5 +49,16 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddNote.class);
         startActivity(intent);
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        db = new NoteDatabase(this);
+        noteList = db.getNoteList();
+        recyclerView = findViewById(R.id.noteList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new NoteAdapter(this, noteList);
+        recyclerView.setAdapter(adapter);
+        super.onResume();
     }
 }

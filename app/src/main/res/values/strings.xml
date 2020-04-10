@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">NoteKeeper</string>
+    <string name="discard_btn">Discard</string>
+    <string name="cancel_btn">Cancel</string>
+
 </resources>

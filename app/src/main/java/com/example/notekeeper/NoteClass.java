@@ -7,16 +7,17 @@ public class NoteClass {
     private String content;
     private String date;
     private String time;
-
-    public void Note(){};
-
-    public void Note(String title, String content, String date, String time) {
-
-    };
-
-    public void Note(long id, String title, String content, String date, String time) {
-
-    }
+    private String color;
+//
+//    public void Note(){};
+//
+//    public void Note(String title, String content, String date, String time) {
+//
+//    };
+//
+//    public void Note(long id, String title, String content, String date, String time) {
+//
+//    }
 
     public long getId() {
         return id;
@@ -56,5 +57,13 @@ public class NoteClass {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
