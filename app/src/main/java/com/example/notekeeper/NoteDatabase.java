@@ -15,6 +15,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
     public NoteDatabase(Context context) {
         super(context,"NoteKeeper.db", null, 1);
+//        context.deleteDatabase("NoteKeeper.db");
         this.context = context.getApplicationContext();
     }
 
@@ -63,7 +64,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                long id = cursor.getLong(0);
+                String id = cursor.getString(0);
                 String title = cursor.getString(1);
                 String date = cursor.getString(3);
                 String time = cursor.getString(4);
@@ -78,47 +79,45 @@ public class NoteDatabase extends SQLiteOpenHelper {
                 cursor.moveToNext();
             }
         }
-        Log.d("id", Long.toString(noteList.get(0).getId()));
-        Log.d("title", noteList.get(0).getTitle());
-        Log.d("date", noteList.get(0).getDate());
-        Log.d("time", noteList.get(0).getTime());
-        Log.d("color", noteList.get(0).getColor());
+//        Log.d("id", Long.toString(noteList.get(0).getId()));
+//        Log.d("title", noteList.get(0).getTitle());
+//        Log.d("date", noteList.get(0).getDate());
+//        Log.d("time", noteList.get(0).getTime());
+//        Log.d("color", noteList.get(0).getColor());
 
         cursor.close();
         return noteList;
     }
 
-//    public List<NoteClass> getNote() {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        List<NoteClass> noteList = new ArrayList<>();
+    public List<NoteClass> getNote(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<NoteClass> noteList = new ArrayList<>();
+
+        String MY_QUERY = "SELECT * FROM notesTable WHERE id = ?";
+        Cursor cursor = db.rawQuery(MY_QUERY, new String[]{id});
+        if (cursor.moveToFirst()) {
+//            String title = cursor.getString(1);
+            String content = cursor.getString(2);
+            String date = cursor.getString(3);
+            String time = cursor.getString(4);
+            String color = cursor.getString(5);
+
+            NoteClass note = new NoteClass();
+//            note.setTitle(title);
+            note.setContent(content);
+            note.setDate(date);
+            note.setTime(time);
+            note.setColor(color);
+            noteList.add(note);
+        }
+        cursor.close();
 //
-//        String MY_QUERY = "SELECT * FROM notesTable ORDER BY id desc";
-//        Cursor cursor = db.rawQuery(MY_QUERY, new String[]{});
-//        if (cursor.getCount() > 0) {
-//            cursor.moveToFirst();
-//            while (!cursor.isAfterLast()) {
-//                String title = cursor.getString(1);
-//                String content = cursor.getString(2);
-//                String date = cursor.getString(3);
-//                String time = cursor.getString(4);
-//                String color = cursor.getString(5);
-//                NoteClass note = new NoteClass();
-//                note.setTitle(title);
-//                note.setContent(content);
-//                note.setDate(date);
-//                note.setTime(time);
-//                note.setColor(color);
-//                noteList.add(note);
-//                cursor.moveToNext();
-//            }
-//        }
 //        Log.d("title", noteList.get(0).getTitle());
 //        Log.d("content", noteList.get(0).getContent());
 //        Log.d("date", noteList.get(0).getDate());
 //        Log.d("time", noteList.get(0).getTime());
 //        Log.d("color", noteList.get(0).getColor());
-//
-//        cursor.close();
-//        return noteList;
-//    }
+
+        return noteList;
+    }
 }
