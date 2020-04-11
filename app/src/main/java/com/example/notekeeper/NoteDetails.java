@@ -1,9 +1,11 @@
 package com.example.notekeeper;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,10 +71,33 @@ public class NoteDetails extends AppCompatActivity {
             case R.id.edit:
                 Intent intent = new Intent(this, EditNote.class);
                 intent.putExtra("title", title);
+                intent.putExtra("content", content);
                 intent.putExtra("id", id);
                 startActivityForResult(intent, 1);
+                finish();
                 break;
             case R.id.delete:
+                db = new NoteDatabase(this);
+                AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(this);
+                myAlertBuilder.setTitle("Delete Note");
+                myAlertBuilder.setMessage("Are you sure to delete ' "+ title +" ' ?");
+                myAlertBuilder.setPositiveButton("Yes", new
+                        DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                db.deleteNote(id);
+                                Toast.makeText(getApplicationContext(), "' "+title+" ' has been deleted !", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        });
+                myAlertBuilder.setNegativeButton(getString(R.string.cancel_btn), new
+                        DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(), "Cancel",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                // Create and show the AlertDialog;
+                myAlertBuilder.show();
                 Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
                 break;
         }

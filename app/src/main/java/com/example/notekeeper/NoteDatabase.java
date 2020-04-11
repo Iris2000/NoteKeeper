@@ -55,6 +55,12 @@ public class NoteDatabase extends SQLiteOpenHelper {
         }
     }
 
+    public boolean deleteNote (String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete("notesTable", "id" + "="+id, null) > 0;
+    }
+
+
     public List<NoteClass> getNoteList() {
         SQLiteDatabase db = this.getReadableDatabase();
         List<NoteClass> noteList = new ArrayList<>();

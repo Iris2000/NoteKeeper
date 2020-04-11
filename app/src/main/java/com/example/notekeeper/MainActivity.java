@@ -62,8 +62,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent(this, AddNote.class);
-        startActivity(intent);
+
+        if(item.toString().equals("Add Note")){
+            Intent intent = new Intent(this, AddNote.class);
+            intent.putExtra("from", "MainActivity");
+            startActivity(intent);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -88,13 +93,12 @@ public class MainActivity extends AppCompatActivity implements
         String target_text = newText.toLowerCase();
         List<NoteClass> newList = new ArrayList<>();
         for(NoteClass title : noteList){
-            if(target_text.toLowerCase().contains(target_text)){
+            if(title.getTitle().toLowerCase().contains(target_text)){
                 newList.add(title);
             }
         }
 
         adapter.setFilter(newList);
-
         return true;
     }
 }

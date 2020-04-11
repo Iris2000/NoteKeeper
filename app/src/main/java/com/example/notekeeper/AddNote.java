@@ -51,7 +51,6 @@ public class AddNote extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
-
         // setup toolbar
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.black));
@@ -69,6 +68,7 @@ public class AddNote extends AppCompatActivity {
         mContent = findViewById(R.id.content);
         mDateTime = findViewById(R.id.dateTime);
         mReminder = findViewById(R.id.reminderBtn);
+
 
         // get current date and time
         currentDate = new SimpleDateFormat("EEE, d MMM yyyy", Locale.getDefault()).format(new Date());
