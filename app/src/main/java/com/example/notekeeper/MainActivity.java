@@ -7,14 +7,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-
+import android.widget.EditText;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import android.widget.ListView;
+import android.widget.SearchView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements
+        SearchView.OnQueryTextListener {
 
     Toolbar toolbar;
     NoteDatabase db;
@@ -26,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.black));
         setSupportActionBar(toolbar);
@@ -42,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.add_note_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.search_button);
+        SearchView searchView = (SearchView)menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -60,5 +76,25 @@ public class MainActivity extends AppCompatActivity {
         adapter = new NoteAdapter(this, noteList);
         recyclerView.setAdapter(adapter);
         super.onResume();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String target_text = newText.toLowerCase();
+        List<NoteClass> newList = new ArrayList<>();
+        for(NoteClass title : noteList){
+            if(target_text.toLowerCase().contains(target_text)){
+                newList.add(title);
+            }
+        }
+
+        adapter.setFilter(newList);
+
+        return true;
     }
 }

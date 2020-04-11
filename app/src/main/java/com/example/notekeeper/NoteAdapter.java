@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
@@ -80,6 +81,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                 }
             });
         }
+    }
+
+    public void setFilter(List<NoteClass> newList){
+        noteList = new ArrayList<>();
+        noteList.addAll(newList);
+        notifyDataSetChanged();
     }
 
 //    public NoteAdapter(Context context, List<NoteClass> noteList) {
