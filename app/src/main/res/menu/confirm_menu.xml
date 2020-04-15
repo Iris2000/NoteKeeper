@@ -4,10 +4,9 @@
 
     <item
         android:id="@+id/addimage"
-        android:icon="@drawable/add"
-        app:showAsAction="ifRoom"
-        android:title="Add Image">
-    </item>
+        android:icon="@drawable/ic_add"
+        android:title="Add Image"
+        app:showAsAction="ifRoom"></item>
 
     <item
         android:id="@+id/save"
