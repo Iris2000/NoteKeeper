@@ -8,6 +8,7 @@ public class NoteClass {
     private String date;
     private String time;
     private String color;
+    private byte[] image;
 //
 //    public void Note(){};
 //
@@ -65,5 +66,10 @@ public class NoteClass {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void setImage(byte[] image) { this.image = image; }
+
+    public Object getImage() { return image;
     }
 }

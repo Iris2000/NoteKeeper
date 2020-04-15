@@ -157,4 +157,14 @@
         app:layout_constraintStart_toEndOf="@+id/reminderIcon"
         app:layout_constraintTop_toTopOf="@+id/reminderBtn" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="192dp"
+        android:layout_height="123dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_gallery"
+        tools:layout_editor_absoluteY="467dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

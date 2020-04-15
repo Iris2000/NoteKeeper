@@ -1,5 +1,6 @@
 package com.example.notekeeper;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,8 +10,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.net.sip.SipSession;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,15 +25,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 public class EditNote extends AppCompatActivity {
+
+    private int PICK_IMAGE_REQUEST = 1;
 
     Toolbar toolbar;
     ConstraintLayout layout;
@@ -47,6 +59,7 @@ public class EditNote extends AppCompatActivity {
     String currentDate;
     String currentTime;
     String color = "noteColor0";
+    ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +89,10 @@ public class EditNote extends AppCompatActivity {
         mContent.setText(intent.getStringExtra("content"));
         mContent.setFocusable(true);
         id = intent.getStringExtra("id");
+        byte[] imagebyte = intent.getByteArrayExtra("image");
+        InputStream input=new ByteArrayInputStream(imagebyte);
+        Bitmap ext_pic = BitmapFactory.decodeStream(input);
+        image.setImageBitmap(ext_pic);
 
 
         // get current date and time
@@ -251,6 +268,7 @@ public class EditNote extends AppCompatActivity {
             case R.id.save:
                 title = mTitle.getText().toString();
                 content = mContent.getText().toString();
+                Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
                 if (title.length() == 0) {
                     Toast.makeText(this, "Title is empty", Toast.LENGTH_SHORT).show();
                 }
@@ -263,7 +281,7 @@ public class EditNote extends AppCompatActivity {
                     if (!deleteNote){
                         Log.d("failed", "deleteNote failed");
                     }else{
-                        boolean insertNote = db.insertNote(title, content, currentDate, currentTime, color);
+                        boolean insertNote = db.insertNote(title, content, currentDate, currentTime, color, bitmap);
                         if (!insertNote) {
                             Log.d("failed", "insertNote failed");
                         }
@@ -272,8 +290,37 @@ public class EditNote extends AppCompatActivity {
                     finish();
                 }
                 break;
+
+            case R.id.addimage:
+                uploadimage();
+                break;
         }
 //        Log.d("item", Integer.toString(item.getItemId()));
         return super.onOptionsItemSelected(item);
+    }
+
+    private void uploadimage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                // Log.d(TAG, String.valueOf(bitmap));
+
+                ImageView imageView = findViewById(R.id.imageView);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -40,6 +40,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         String date = noteList.get(i).getDate();
         String time = noteList.get(i).getTime();
         String color = noteList.get(i).getColor();
+        byte[] imagebyte = (byte[]) noteList.get(i).getImage();
 
         viewHolder.mTitle.setText(title);
         viewHolder.mDateTime.setText(date + " " + time);
@@ -70,6 +71,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             mCardView = itemView.findViewById(R.id.cardView);
             mTitle = itemView.findViewById(R.id.title);
             mDateTime = itemView.findViewById(R.id.dateTime);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

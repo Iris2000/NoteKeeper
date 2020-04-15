@@ -28,6 +28,7 @@ public class NoteDetails extends AppCompatActivity {
     String date;
     String time;
     String content;
+    byte[] imagebyte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,8 @@ public class NoteDetails extends AppCompatActivity {
         mDateTime.setText(date + " " + time);
         mContent.setText(content);
 
+        imagebyte = (byte[]) noteInfo.get(0).getImage();
+
     }
 
     @Override
@@ -73,6 +76,7 @@ public class NoteDetails extends AppCompatActivity {
                 intent.putExtra("title", title);
                 intent.putExtra("content", content);
                 intent.putExtra("id", id);
+                intent.putExtra("image", imagebyte);
                 startActivityForResult(intent, 1);
                 finish();
                 break;

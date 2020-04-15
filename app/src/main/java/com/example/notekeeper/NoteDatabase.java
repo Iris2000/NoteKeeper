@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
                 "content text not null," +
                 "date text not null," +
                 "time text not null," +
-                "color text not null)");
+                "color text not null," +
+                "image blob not null )");
     }
 
     @Override
@@ -34,12 +37,17 @@ public class NoteDatabase extends SQLiteOpenHelper {
         db.execSQL("drop table if exists notesTable");
     }
 
-    public boolean insertNote(String title, String content, String date, String time, String color) {
+    public boolean insertNote(String title, String content, String date, String time, String color, Bitmap image) {
 //        Log.d("title", title);
 //        Log.d("content", content);
 //        Log.d("date", date);
 //        Log.d("time", time);
 //        Log.d("color", color);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageInByte = baos.toByteArray();
+
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", title);
@@ -47,6 +55,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         contentValues.put("date", date);
         contentValues.put("time", time);
         contentValues.put("color", color);
+        contentValues.put("image", imageInByte);
         long ins = db.insert("notesTable", null, contentValues);
         if (ins == -1) {
             return false;
@@ -75,12 +84,14 @@ public class NoteDatabase extends SQLiteOpenHelper {
                 String date = cursor.getString(3);
                 String time = cursor.getString(4);
                 String color = cursor.getString(5);
+                byte[] image = cursor.getBlob(6);
                 NoteClass note = new NoteClass();
                 note.setId(id);
                 note.setTitle(title);
                 note.setDate(date);
                 note.setTime(time);
                 note.setColor(color);
+                note.setImage(image);
                 noteList.add(note);
                 cursor.moveToNext();
             }
@@ -107,6 +118,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
             String date = cursor.getString(3);
             String time = cursor.getString(4);
             String color = cursor.getString(5);
+            byte[] image = cursor.getBlob(6);
 
             NoteClass note = new NoteClass();
 //            note.setTitle(title);
@@ -114,6 +126,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
             note.setDate(date);
             note.setTime(time);
             note.setColor(color);
+            note.setImage(image);
             noteList.add(note);
         }
         cursor.close();
