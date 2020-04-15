@@ -7,10 +7,13 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,7 @@ public class NoteDetails extends AppCompatActivity {
     String time;
     String content;
     byte[] imagebyte;
+    ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class NoteDetails extends AppCompatActivity {
 
         mDateTime = findViewById(R.id.dateTime);
         mContent = findViewById(R.id.content);
+        image = findViewById(R.id.imageView2);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.black));
@@ -59,6 +64,8 @@ public class NoteDetails extends AppCompatActivity {
         mContent.setText(content);
 
         imagebyte = (byte[]) noteInfo.get(0).getImage();
+        Bitmap bmp = BitmapFactory.decodeByteArray(imagebyte, 0, imagebyte.length);
+        image.setImageBitmap(bmp);
 
     }
 

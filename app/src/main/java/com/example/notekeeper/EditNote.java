@@ -84,6 +84,7 @@ public class EditNote extends AppCompatActivity {
         mContent = findViewById(R.id.content);
         mDateTime = findViewById(R.id.dateTime);
         mReminder = findViewById(R.id.reminderBtn);
+        image = findViewById(R.id.imageView);
 
         mTitle.setText(intent.getStringExtra("title"));
         mContent.setText(intent.getStringExtra("content"));
